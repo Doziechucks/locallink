@@ -9,8 +9,8 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.List;
 
-@Document
-@Getter @AllArgsConstructor
+@Getter
+@Document(collection = "payment")
 public class Payment {
     @MongoId
     private String paymentId;
@@ -25,4 +25,12 @@ public class Payment {
     private List<String> url;
     @Setter
     private boolean isVerified;
+
+    public Payment(String title, String description, String transactionId, List<String> url, boolean isVerified) {
+        this.title = title;
+        this.description = description;
+        this.transactionId = transactionId;
+        this.url = url;
+        this.isVerified = isVerified;
+    }
 }

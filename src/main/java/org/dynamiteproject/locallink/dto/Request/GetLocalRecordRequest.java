@@ -1,5 +1,8 @@
 package org.dynamiteproject.locallink.dto.Request;
 
-public class getLocalRecordRequest {
+import lombok.Data;
+
+@Data
+public class GetLocalRecordRequest {
     private String localId;
 }

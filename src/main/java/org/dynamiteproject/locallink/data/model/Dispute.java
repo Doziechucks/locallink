@@ -8,9 +8,8 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.List;
 
-@Document
+@Document(collection = "dispute")
 @Getter
-@AllArgsConstructor
 public class Dispute {
     @MongoId
     private String disputeId;
@@ -24,5 +23,13 @@ public class Dispute {
     private List<String> url;
     @Setter
     private boolean isSettled;
+
+    public Dispute(String title, String description, String localId, List<String> url, boolean isSettled) {
+        this.title = title;
+        this.description = description;
+        this.localId = localId;
+        this.url = url;
+        this.isSettled = isSettled;
+    }
 
 }

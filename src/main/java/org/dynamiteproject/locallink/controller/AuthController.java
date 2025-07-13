@@ -1,17 +1,13 @@
 package org.dynamiteproject.locallink.controller;
 
-import org.dynamiteproject.locallink.dto.Request.LocalRecordRequest;
-import org.dynamiteproject.locallink.dto.Request.getLocalRecordRequest;
-import org.dynamiteproject.locallink.dto.Response.LocalRecordResponse;
-import org.dynamiteproject.locallink.dto.Response.getLocalRecordResponse;
+import org.dynamiteproject.locallink.dto.Request.*;
+import org.dynamiteproject.locallink.dto.Response.*;
 import org.dynamiteproject.locallink.service.UserAuthenticationServices;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.http.ResponseEntity;
 
-import org.dynamiteproject.locallink.dto.Request.LocalRegistrationRequest;
-import org.dynamiteproject.locallink.dto.Response.LocalRegistrationResponse;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -41,8 +37,20 @@ public class AuthController {
     }
 
     @GetMapping("/getRecords")
-    public ResponseEntity<getLocalRecordResponse> getRecords(@RequestBody @Valid getLocalRecordRequest request){
-        getLocalRecordResponse response = userService.getLocals(request);
+    public ResponseEntity<GetLocalRecordResponse> getRecords(@RequestBody @Valid GetLocalRecordRequest request){
+        GetLocalRecordResponse response = userService.getLocalRecords(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/payment")
+    public ResponseEntity<PaymentResponse> createPayment(@RequestBody @Valid PaymentRequest request){
+        PaymentResponse response = userService.createPayment(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/dispute")
+    public ResponseEntity<DisputeResponse> dispute(@RequestBody @Valid DisputeRequest request){
+        DisputeResponse response = userService.createDispute(request);
         return ResponseEntity.ok(response);
     }
 

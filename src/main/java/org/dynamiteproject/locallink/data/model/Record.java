@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Document
@@ -22,13 +23,16 @@ public class Record {
     @Setter
     private String LocalId;
     @Setter
+    private BigDecimal fee;
+    @Setter
     private List<String> url;
 
-    public Record(String title, String comments, String OfficerId, String LocalId, List<String> url) {
+    public Record(String title, String comments, String OfficerId, String LocalId, BigDecimal fee, List<String> url) {
         this.title = title;
         this.comments = comments;
         this.OfficerId = OfficerId;
         this.LocalId = LocalId;
+        this.fee = fee;
         this.url = url;
     }
 }
