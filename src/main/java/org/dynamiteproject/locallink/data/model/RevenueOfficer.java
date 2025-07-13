@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Document
-@Getter @AllArgsConstructor
+@Getter
 public class RevenueOfficer {
     @MongoId
     private String officerId;
@@ -22,7 +22,17 @@ public class RevenueOfficer {
     @Setter
     private String password;
     @Setter
+    private String phoneNumber;
+    @Setter
     private Role role = Role.OFFICER;
 
+    public RevenueOfficer(String appointmentId, String firstname, String lastname, String email, String password, String phoneNumber) {
+        this.appointmentId = appointmentId;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
 
+    }
 }

@@ -7,11 +7,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 
-@Document
-@Getter @AllArgsConstructor
+@Document(collection = "admins")
+@Getter
 public class Admin {
     @MongoId
     private String adminId;
+    @Setter
+    private String employmentId;
     @Setter
     private String firstname;
     @Setter
@@ -19,9 +21,18 @@ public class Admin {
     @Setter
     private String email;
     @Setter
-    private String employmentId;
+    private String password;
     @Setter
-    private String phone;
+    private String phoneNumber;
     @Setter
     private Role role = Role.ADMIN;
+
+    public Admin(String employmentId, String firstname, String lastname, String email, String password, String phoneNumber) {
+        this.employmentId = employmentId;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+    }
 }
