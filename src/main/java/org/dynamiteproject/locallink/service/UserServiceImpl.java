@@ -11,9 +11,12 @@ import org.dynamiteproject.locallink.data.repository.RecordRepo;
 import org.dynamiteproject.locallink.dto.Request.*;
 import org.dynamiteproject.locallink.dto.Response.*;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ValidationException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -68,7 +71,7 @@ public class UserServiceImpl implements UserServices {
     }
 
     @Override
-    public GetDisputeResponse getUnsettledDisputes(){
+    public GetDisputeResponse getUnsettledDisputes() {
 //        List<DisputeRequest> disputes = new ArrayList<>();
 //        for(Dispute dispute : disputeRepo.findAll()){
 //            if (!dispute.isSettled()){
@@ -108,7 +111,7 @@ public class UserServiceImpl implements UserServices {
     }
 
     @Override
-    public String verifyPayment(VerifyPaymentRequest request){
+    public String verifyPayment(VerifyPaymentRequest request) {
         Optional<Payment> optionalPayment = paymentRepo.findAll().stream()
                 .filter(payment -> Objects.equals(payment.getPaymentId(), request.getPaymentId()))
                 .findFirst();
@@ -118,11 +121,59 @@ public class UserServiceImpl implements UserServices {
         }
         Payment payment = optionalPayment.get();
 
-        if (payment.isVerified()){
+        if (payment.isVerified()) {
             return "Payment already verified";
         }
         payment.setVerified(true);
         paymentRepo.save(payment);
         return "Payment verified";
+    }
+
+    @Override
+    public GetOutStandingResponse getOutStandings(GetOutStandingRequest request) {
+//        BigDecimal amount = BigDecimal.ZERO;
+//        BigDecimal totalPayment = BigDecimal.ZERO;
+//        BigDecimal totalFee = BigDecimal.ZERO;
+//        List<Record> records = new ArrayList<>();
+//        List<Payment> payments = new ArrayList<>();
+//        for (Local local : localRepo.findAll()) {
+//            if (request.getLocalId().equals(local.getLocalId())) {
+//                for (Record record : recordRepo.findRecordsByLocalId(local.getLocalId())) {
+//                    if (record.getLocalId().equals(request.getLocalId())) records.add(record);
+//                    else throw new ValidationException("Local record does not exist");
+//                }
+//                for (Payment payment : paymentRepo.findPaymentByLocalId(local.getLocalId())) {
+//                    if (payment.getPaymentId().equals(request.getLocalId())) payments.add(payment);
+//                }
+//            } else throw new ValidationException("Local does not exist");
+//        }
+//        for (Record record : records) totalFee = totalFee.add(record.getFee());
+//        for (Payment payment : payments) {
+//            totalPayment = totalPayment.add(payment.getAmount());
+//            amount = totalFee.subtract(totalPayment);
+//        }
+//        return new GetOutStandingResponse(request.getLocalId(), amount);
+//    }
+        Local local = localRepo.findById(request.getLocalId())
+                .orElseThrow(() -> new ValidationException("Local does not exist"));
+        List<Record> records = recordRepo.findRecordsByLocalId(local.getLocalId());
+        List<Payment> newPayments = paymentRepo.findPaymentsByLocalId(local.getLocalId());
+        List<Payment> payments = new ArrayList<>();
+        for (Payment payment : newPayments) {
+            if (payment.isVerified())
+                payments.add(payment);
+        }
+        if (records.isEmpty()) {
+            throw new ValidationException("No records found for local: " + local.getLocalId());
+        }
+        BigDecimal totalFee = records.stream()
+                .map(Record::getFee)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal totalPayment = payments.stream()
+                .map(Payment::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal outstandingAmount = totalFee.subtract(totalPayment);
+        return new GetOutStandingResponse(local.getLocalId(), outstandingAmount);
     }
 }

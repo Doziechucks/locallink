@@ -67,6 +67,12 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/getOutStandings")
+    public ResponseEntity<GetOutStandingResponse> outStandings(@RequestBody @Valid GetOutStandingRequest request) {
+        GetOutStandingResponse response = userService.getOutStandings(request);
+        return ResponseEntity.ok(response);
+    }
+
 
 
 
