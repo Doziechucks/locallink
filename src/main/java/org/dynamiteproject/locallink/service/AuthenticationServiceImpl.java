@@ -12,6 +12,8 @@ import org.dynamiteproject.locallink.dto.Request.LoginRequest;
 import org.dynamiteproject.locallink.dto.Request.StaffCreateAccountRequest;
 import org.dynamiteproject.locallink.dto.Response.LocalRegistrationResponse;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.dynamiteproject.locallink.utils.JwtUtils;
@@ -26,6 +28,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtUtils jwtUtils;
     private final PasswordEncoder passwordEncoder;
 
+    String  passwordRegex = "^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z]).{8,}$";
+    String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,15}$";
+
+
 
 
     public AuthenticationServiceImpl(ModelMapper modelMapper, LocalRepo localRepo, AdminRepo adminRepo, RevenueOfficerRepo officerRepo, JwtUtils jwtUtils, PasswordEncoder passwordEncoder) {
@@ -39,10 +45,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public LocalRegistrationResponse registerLocal(LocalRegistrationRequest localRegistrationRequest) {
-        localRegistrationRequest.setPassword(passwordEncoder.encode(localRegistrationRequest.getPassword()));
-        Local local = modelMapper.map(localRegistrationRequest, Local.class);
-        Local newLocal = localRepo.save(local);
-        return modelMapper.map(newLocal, LocalRegistrationResponse.class);
+        if(validateInformationIntegrity(localRegistrationRequest)) {
+            localRegistrationRequest.setPassword(passwordEncoder.encode(localRegistrationRequest.getPassword()));
+            Local local = modelMapper.map(localRegistrationRequest, Local.class);
+            Local newLocal = localRepo.save(local);
+            return modelMapper.map(newLocal, LocalRegistrationResponse.class);
+        }
+        throw new IllegalArgumentException("Invalid credentials");
     }
 
 
@@ -98,5 +107,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // No user found
         return "Invalid email or password";
     }
+    private Boolean validateInformationIntegrity(LocalRegistrationRequest request){
+        if(request.getFirstName() == null || request.getFirstName().isEmpty()) {
+            throw new IllegalArgumentException("First name cannot be empty");
+        }
+        if(request.getLastName() == null || request.getLastName().isEmpty()) {
+            throw new IllegalArgumentException("Last name cannot be empty");
+        }
+        if (request.getPassword() == null || request.getPassword().isEmpty() || !request.getPassword().matches(passwordRegex)){
+            throw new IllegalArgumentException("Invalid password try again");
+        }
+        if( (request.getEmail() == null || request.getEmail().isEmpty()) || !request.getEmail().matches(emailRegex)){
+            throw new IllegalArgumentException("Invalid email try again");
+        }
+        return true;
+    }
+
 
 }

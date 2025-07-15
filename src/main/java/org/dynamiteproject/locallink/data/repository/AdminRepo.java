@@ -8,11 +8,7 @@ import java.util.List;
 
 @Repository
 public interface AdminRepo extends MongoRepository<Admin, String> {
-    Admin saveAdmin(Admin admin);
-    Admin findAdminByAdminId(String adminId);
-    List<Admin> findAdminByEmploymentId(String employmentId);
     Admin findAdminByEmail(String email);
-    List<Admin> findAdminByFirstname(String name);
-    List<Admin> findAdminByLastname(String name);
+
 
 }

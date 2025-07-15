@@ -8,12 +8,6 @@ import java.util.List;
 
 @Repository
 public interface PaymentRepo extends MongoRepository<Payment, String>{
-    Payment savePayment(Payment payment);
-    Payment findByPaymentId(String paymentId);
     List<Payment> findPaymentsByLocalId(String paymentId);
-    Payment findByTransactionId(String transactionId);
-    List<Payment> findPaymentByVerified(Boolean isVerified);
-    List<Payment> findPaymentByTitle(String title);
-    Payment findPaymentByTransactionId(String transactionId);
-    Payment updatePayment(Payment payment);
+
 }

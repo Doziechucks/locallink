@@ -8,10 +8,6 @@ import java.util.List;
 
 @Repository
 public interface LocalRepo extends MongoRepository<Local, String> {
-    Local saveLocal(Local local);
-    List<Local> findLocalByLocalId(String localId);
     Local findLocalByEmail(String email);
-    List<Local> findLocalByFirstname(String firstname);
-    List<Local> findLocalByLastname(String lastname);
-    List<Local> findLocalByAddress(String address);
+
 }

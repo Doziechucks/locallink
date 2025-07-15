@@ -14,7 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
-import javax.validation.ValidationException;
+import jakarta.validation.ValidationException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserServices {
     @Override
     public LocalRecordResponse createRecord(LocalRecordRequest localRecordRequest) {
         Record record = modelMapper.map(localRecordRequest, Record.class);
-        Record newRecord = recordRepo.saveRecord(record);
+        Record newRecord = recordRepo.save(record);
         return modelMapper.map(newRecord, LocalRecordResponse.class);
     }
 

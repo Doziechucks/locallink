@@ -2,12 +2,13 @@ package org.dynamiteproject.locallink.data.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Document(collection = "local")
-@Getter
+@Getter @NoArgsConstructor
 public class Local {
     @MongoId
     private String localId;

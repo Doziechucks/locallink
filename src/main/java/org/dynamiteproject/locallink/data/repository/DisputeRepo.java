@@ -8,8 +8,4 @@ import java.util.List;
 
 @Repository
 public interface DisputeRepo extends MongoRepository<Dispute, String> {
-    Dispute saveDispute(Dispute dispute);
-    List<Dispute> findDisputeBySettled(Boolean isSettled);
-    List<Dispute> findDisputeByTitle(String title);
-    Dispute updateDispute(Dispute dispute);
 }
