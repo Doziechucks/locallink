@@ -2,6 +2,7 @@ package org.dynamiteproject.locallink.data.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
@@ -10,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Document
-@Getter
+@Getter @NoArgsConstructor
 public class Record {
     @MongoId
     private String recordId;

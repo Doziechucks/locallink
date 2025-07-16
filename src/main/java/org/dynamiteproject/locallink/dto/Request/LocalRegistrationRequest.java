@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data @AllArgsConstructor
 public class LocalRegistrationRequest {
-    private String firstName;
-    private String lastName;
+    private String firstname;
+    private String lastname;
     private String email;
     private String password;
     private String address;

@@ -1,5 +1,6 @@
 package org.dynamiteproject.locallink.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dynamiteproject.locallink.LocalLinkApplication;
 import org.dynamiteproject.locallink.config.TestSecurityConfig;
 import org.dynamiteproject.locallink.data.model.Local;
@@ -21,9 +22,11 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
+@Slf4j
 @SpringBootTest
 @Testcontainers
 @ActiveProfiles("test")
+
 public class AuthenticationServiceImplTest {
 
     @Container
@@ -62,12 +65,19 @@ public class AuthenticationServiceImplTest {
 
         LocalRegistrationResponse response = service.registerLocal(registrationRequest);
 
+        // Only assert the fields you expect in the response
         Assertions.assertNotNull(response);
-        Assertions.assertEquals("Dozie", response.getFirstName());
+        log.info("Response: {}", response);
+        Assertions.assertEquals("Dozie", response.getFirstname());
+        Assertions.assertNotNull(response.getLocalId());
 
+        // Verify the complete data was saved to database
         Local saved = mongoTemplate.findById(response.getLocalId(), Local.class);
         Assertions.assertNotNull(saved);
         Assertions.assertEquals("Dozie", saved.getFirstname());
+        Assertions.assertEquals("Money", saved.getLastname());
+        Assertions.assertEquals("dozie@gmail.com", saved.getEmail());
+        // Add other field assertions as needed
     }
 }
     // Provide necessary beans for the test context

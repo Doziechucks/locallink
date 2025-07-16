@@ -2,9 +2,10 @@ package org.dynamiteproject.locallink.dto.Response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data @AllArgsConstructor
+@Data @AllArgsConstructor @NoArgsConstructor
 public class LocalRegistrationResponse {
     private String localId;
-    private String firstName;
+    private String firstname;
 }

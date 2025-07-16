@@ -108,10 +108,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return "Invalid email or password";
     }
     private Boolean validateInformationIntegrity(LocalRegistrationRequest request){
-        if(request.getFirstName() == null || request.getFirstName().isEmpty()) {
+        if(request.getFirstname() == null || request.getFirstname().isEmpty()) {
             throw new IllegalArgumentException("First name cannot be empty");
         }
-        if(request.getLastName() == null || request.getLastName().isEmpty()) {
+        if(request.getLastname() == null || request.getLastname().isEmpty()) {
             throw new IllegalArgumentException("Last name cannot be empty");
         }
         if (request.getPassword() == null || request.getPassword().isEmpty() || !request.getPassword().matches(passwordRegex)){
