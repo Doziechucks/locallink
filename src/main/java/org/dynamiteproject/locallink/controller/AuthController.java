@@ -26,8 +26,11 @@ public class AuthController {
     @PreAuthorize("hasAnyRole('ADMIN', 'OFFICER')")
     @PostMapping("/registerLocal")
     public ResponseEntity<LocalRegistrationResponse> registerUser(@RequestBody @Valid LocalRegistrationRequest request){
-        LocalRegistrationResponse response = authService.registerLocal(request);
+        try{LocalRegistrationResponse response = authService.registerLocal(request);
         return ResponseEntity.ok(response);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PermitAll

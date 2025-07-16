@@ -21,7 +21,7 @@ public class Local {
     @Setter
     private String password;
     @Setter
-    private String Address;
+    private String address;
     @Setter
     private String phoneNumber;
     @Setter
@@ -32,7 +32,7 @@ public class Local {
         this.lastname = lastname;
         this.email = email;
         this.password = password;
-        this.Address = address;
+        this.address = address;
         this.phoneNumber = phoneNumber;
     }
 
