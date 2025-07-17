@@ -72,6 +72,16 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/getPayments")
+    public ResponseEntity<GetPaymentResponse> outStandings() {
+        try {
+            GetPaymentResponse response = userService.getUnverifiedPayments();
+            return ResponseEntity.ok(response);
+        } catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 
 
 

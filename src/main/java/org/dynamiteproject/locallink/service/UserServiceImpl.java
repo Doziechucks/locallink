@@ -176,4 +176,15 @@ public class UserServiceImpl implements UserServices {
         BigDecimal outstandingAmount = totalFee.subtract(totalPayment);
         return new GetOutStandingResponse(local.getLocalId(), outstandingAmount);
     }
+
+    @Override
+    public GetPaymentResponse getUnverifiedPayments(){
+        List<PaymentRequest> payments = paymentRepo.findAll().stream()
+                .filter(payment -> !payment.isVerified())
+                .map(payment -> modelMapper.map(payment, PaymentRequest.class))
+                .collect(Collectors.toList());
+
+        return new GetPaymentResponse(payments);
+    }
+
 }

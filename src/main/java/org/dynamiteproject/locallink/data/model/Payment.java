@@ -28,11 +28,11 @@ public class Payment {
     @Indexed(unique = true)
     private String transactionId;
     @Setter
-    private List<String> url;
+    private String url;
     @Setter
     private boolean isVerified;
 
-    public Payment(String title, String localId, BigDecimal amount, String description, String transactionId, List<String> url, boolean isVerified) {
+    public Payment(String title, String localId, BigDecimal amount, String description, String transactionId, String url, boolean isVerified) {
         this.title = title;
         this.localId = localId;
         this.amount = amount;

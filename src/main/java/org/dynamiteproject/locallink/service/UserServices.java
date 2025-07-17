@@ -13,5 +13,6 @@ public interface UserServices {
     String settleDispute(SettleDisputeRequest request);
     String verifyPayment(VerifyPaymentRequest request);
     GetOutStandingResponse getOutStandings(GetOutStandingRequest request);
+    GetPaymentResponse getUnverifiedPayments();
 }
 

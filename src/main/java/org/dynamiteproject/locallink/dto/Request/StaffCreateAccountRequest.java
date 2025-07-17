@@ -11,5 +11,5 @@ public class StaffCreateAccountRequest {
     private String lastname;
     private String email;
     private String password;
-    private Role role;
+//    private Role role;
 }
