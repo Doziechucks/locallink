@@ -73,11 +73,21 @@ public class UserController {
     }
 
     @GetMapping("/getPayments")
-    public ResponseEntity<GetPaymentResponse> outStandings() {
+    public ResponseEntity<GetPaymentResponse> getUnverifiedPayments() {
         try {
             GetPaymentResponse response = userService.getUnverifiedPayments();
             return ResponseEntity.ok(response);
         } catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/getLocals")
+    public ResponseEntity<GetLocalsResponse> getAllLocals() {
+        try{
+            GetLocalsResponse response = userService.getAllLocals();
+            return ResponseEntity.ok(response);
+        }catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
     }

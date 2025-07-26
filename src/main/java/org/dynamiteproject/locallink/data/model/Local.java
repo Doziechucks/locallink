@@ -21,13 +21,13 @@ public class Local {
     @Setter
     private String password;
     @Setter
-    private String address;
-    @Setter
     private String phoneNumber;
+    @Setter
+    private String address;
     @Setter
     private Role role = Role.LOCAL;
 
-    public Local(String firstname, String lastname, String email, String password, String address, String phoneNumber) {
+    public Local(String firstname, String lastname, String email, String password, String phoneNumber, String address) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;

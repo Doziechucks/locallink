@@ -9,6 +9,6 @@ public class LocalRegistrationRequest {
     private String lastname;
     private String email;
     private String password;
-    private String address;
     private String phoneNumber;
+    private String address;
 }

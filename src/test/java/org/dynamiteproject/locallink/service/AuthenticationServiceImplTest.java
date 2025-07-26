@@ -59,8 +59,9 @@ public class AuthenticationServiceImplTest {
                 "Money",
                 "dozie@gmail.com",
                 "Password123*",
-                "address",
-                "phoneNumber"
+                "phoneNumber",
+                "address"
+
         );
 
         LocalRegistrationResponse response = service.registerLocal(registrationRequest);

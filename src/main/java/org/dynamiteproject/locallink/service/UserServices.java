@@ -14,5 +14,6 @@ public interface UserServices {
     String verifyPayment(VerifyPaymentRequest request);
     GetOutStandingResponse getOutStandings(GetOutStandingRequest request);
     GetPaymentResponse getUnverifiedPayments();
+    GetLocalsResponse getAllLocals();
 }
 

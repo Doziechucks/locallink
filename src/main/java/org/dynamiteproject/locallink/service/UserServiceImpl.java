@@ -187,4 +187,12 @@ public class UserServiceImpl implements UserServices {
         return new GetPaymentResponse(payments);
     }
 
+    @Override
+    public GetLocalsResponse getAllLocals() {
+        List<LocalResponse> locals = localRepo.findAll().stream()
+                .map(local -> modelMapper.map(local, LocalResponse.class))
+                .collect(Collectors.toList());
+        return new GetLocalsResponse(locals);
+    }
+
 }
