@@ -8,6 +8,7 @@ public class LocalLinkApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(LocalLinkApplication.class, args);
+        System.out.println("MONGODB_URI: " + System.getenv("MONGODB_URI"));
     }
 
 }
