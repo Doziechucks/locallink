@@ -15,6 +15,7 @@ public class LocalLinkApplication {
     }
     public static void main(String[] args) {
         SpringApplication.run(LocalLinkApplication.class, args);
+
     }
 
 }
