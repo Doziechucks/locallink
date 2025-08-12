@@ -3,7 +3,6 @@ package org.dynamiteproject.locallink.service;
 import org.dynamiteproject.locallink.data.model.Admin;
 import org.dynamiteproject.locallink.data.model.Local;
 import org.dynamiteproject.locallink.data.model.RevenueOfficer;
-import org.dynamiteproject.locallink.data.model.Role;
 import org.dynamiteproject.locallink.data.repository.AdminRepo;
 import org.dynamiteproject.locallink.data.repository.LocalRepo;
 import org.dynamiteproject.locallink.data.repository.RevenueOfficerRepo;
@@ -11,9 +10,8 @@ import org.dynamiteproject.locallink.dto.Request.LocalRegistrationRequest;
 import org.dynamiteproject.locallink.dto.Request.LoginRequest;
 import org.dynamiteproject.locallink.dto.Request.StaffCreateAccountRequest;
 import org.dynamiteproject.locallink.dto.Response.LocalRegistrationResponse;
+import org.dynamiteproject.locallink.dto.Response.LoginResponse;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.dynamiteproject.locallink.utils.JwtUtils;
@@ -55,58 +53,77 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
 
-    public String registerStaff(StaffCreateAccountRequest request){
+    public LoginResponse registerStaff(StaffCreateAccountRequest request){
         request.setPassword(passwordEncoder.encode(request.getPassword()));
         if (Character.isUpperCase(request.getEmploymentId().charAt(0))){
             Admin admin = modelMapper.map(request, Admin.class);
             Admin newAdmin = adminRepo.save(admin);
-            return jwtUtils.generateToken(newAdmin.getAdminId(), newAdmin.getFirstname(), newAdmin.getEmail(), newAdmin.getRole());
+            String token = jwtUtils.generateToken(newAdmin.getAdminId(), newAdmin.getFirstname(), newAdmin.getEmail(), newAdmin.getRole());
+            return new LoginResponse(token);
 
         }
         else{
             RevenueOfficer officer = modelMapper.map(request, RevenueOfficer.class);
             RevenueOfficer newOfficer = officerRepo.save(officer);
-            return jwtUtils.generateToken(newOfficer.getOfficerId(), newOfficer.getFirstname(), newOfficer.getEmail(), newOfficer.getRole());
+            String token = jwtUtils.generateToken(newOfficer.getOfficerId(), newOfficer.getFirstname(), newOfficer.getEmail(), newOfficer.getRole());
+            return new LoginResponse(token);
 
         }
     }
 
-    public String login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
         String email = request.getEmail();
         String password = request.getPassword();
-
-
 
         // Try Local
         Local local = localRepo.findLocalByEmail(email);
         if (local != null) {
-            boolean isValid = passwordEncoder.matches(password, local.getPassword());
-            return isValid
-                    ? jwtUtils.generateToken(local.getLocalId(), local.getFirstname(), local.getEmail(), local.getRole())
-                    : "Invalid login credentials";
+            boolean isLocalValid = passwordEncoder.matches(password, local.getPassword());
+            if (isLocalValid) {
+                String token = jwtUtils.generateToken(
+                        local.getLocalId(),
+                        local.getFirstname(),
+                        local.getEmail(),
+                        local.getRole()
+                );
+                return new LoginResponse(token);
+            } else {
+                throw new RuntimeException("Invalid login credentials");
+            }
         }
-
         // Try Admin
         Admin admin = adminRepo.findAdminByEmail(email);
         if (admin != null) {
-            boolean isValid = passwordEncoder.matches(password, admin.getPassword());
-            return isValid
-                    ? jwtUtils.generateToken(admin.getAdminId(), admin.getFirstname(), admin.getEmail(), admin.getRole())
-                    : "Invalid login credentials";
+            boolean isAdminValid = passwordEncoder.matches(password, admin.getPassword());
+            if(isAdminValid){
+                String token = jwtUtils.generateToken(
+                        admin.getAdminId(),
+                        admin.getFirstname(),
+                        admin.getEmail(),
+                        admin.getRole()
+                );
+                return new LoginResponse(token);
+            }
         }
 
-        // Try Revenue Officer
         RevenueOfficer officer = officerRepo.findRevenueOfficerByEmail(email);
         if (officer != null) {
-            boolean isValid = passwordEncoder.matches(password, officer.getPassword());
-            return isValid
-                    ? jwtUtils.generateToken(officer.getOfficerId(), officer.getFirstname(), officer.getEmail(), officer.getRole())
-                    : "Invalid login credentials";
+            boolean isOfficerValid = passwordEncoder.matches(password, officer.getPassword());
+            if(isOfficerValid){
+                String token = jwtUtils.generateToken(
+                        officer.getOfficerId(),
+                        officer.getFirstname(),
+                        officer.getEmail(),
+                        officer.getRole()
+                );
+                return new LoginResponse(token);
+            }
         }
 
-        // No user found
-        return "Invalid email or password";
+
+        throw new RuntimeException("User not found");
     }
+
     private Boolean validateInformationIntegrity(LocalRegistrationRequest request){
         if(request.getFirstname() == null || request.getFirstname().isEmpty()) {
             throw new IllegalArgumentException("First name cannot be empty");

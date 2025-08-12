@@ -5,6 +5,7 @@ import org.dynamiteproject.locallink.dto.Request.LocalRegistrationRequest;
 import org.dynamiteproject.locallink.dto.Request.LoginRequest;
 import org.dynamiteproject.locallink.dto.Request.StaffCreateAccountRequest;
 import org.dynamiteproject.locallink.dto.Response.LocalRegistrationResponse;
+import org.dynamiteproject.locallink.dto.Response.LoginResponse;
 import org.dynamiteproject.locallink.service.AuthenticationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,7 +38,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> registerStaff(@RequestBody @Valid StaffCreateAccountRequest request){
         try{
-            String response = authService.registerStaff(request);
+            LoginResponse response = authService.registerStaff(request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
