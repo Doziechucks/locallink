@@ -49,7 +49,7 @@ public class AuthController {
     @PostMapping("/login")
     private ResponseEntity<?> usersLogin(@RequestBody @Valid LoginRequest request){
         try{
-            String response = authService.login(request);
+            LoginResponse response = authService.login(request);
             return ResponseEntity.ok(response);
         }catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
