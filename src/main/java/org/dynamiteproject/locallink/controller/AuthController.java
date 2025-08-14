@@ -7,6 +7,7 @@ import org.dynamiteproject.locallink.dto.Request.StaffCreateAccountRequest;
 import org.dynamiteproject.locallink.dto.Response.LocalRegistrationResponse;
 import org.dynamiteproject.locallink.dto.Response.LoginResponse;
 import org.dynamiteproject.locallink.service.AuthenticationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/auth")
 public class AuthController {
     private final AuthenticationService authService;
+
 
     public AuthController(AuthenticationService authService) {
         this.authService = authService;
@@ -47,7 +49,9 @@ public class AuthController {
 
     @PermitAll
     @PostMapping("/login")
-    private ResponseEntity<?> usersLogin(@RequestBody @Valid LoginRequest request){
+    public ResponseEntity<?> usersLogin(@RequestBody @Valid LoginRequest request){
+        System.out.println("authService in AuthController = " + authService);
+
         try{
             LoginResponse response = authService.login(request);
             return ResponseEntity.ok(response);

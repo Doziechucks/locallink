@@ -1,5 +1,6 @@
 package org.dynamiteproject.locallink.service;
 
+import jakarta.annotation.PostConstruct;
 import org.dynamiteproject.locallink.data.model.Admin;
 import org.dynamiteproject.locallink.data.model.Local;
 import org.dynamiteproject.locallink.data.model.RevenueOfficer;
@@ -28,8 +29,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     String  passwordRegex = "^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z]).{8,}$";
     String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,15}$";
-
-
 
 
     public AuthenticationServiceImpl(ModelMapper modelMapper, LocalRepo localRepo, AdminRepo adminRepo, RevenueOfficerRepo officerRepo, JwtUtils jwtUtils, PasswordEncoder passwordEncoder) {
@@ -72,6 +71,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public LoginResponse login(LoginRequest request) {
+        System.out.println("localRepo in AuthenticationServiceImpl = " + localRepo);
+        System.out.println("passwordEncoder in AuthenticationServiceImpl = " + passwordEncoder);
         String email = request.getEmail();
         String password = request.getPassword();
 
